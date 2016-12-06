@@ -1,6 +1,7 @@
 import React from 'react'
 import Profile from './Profile.jsx'
 import AddProfile from './AddProfile.jsx'
+import {getProfiles} from '../utils/profileApi.jsx'
 
 /*Functional Component example*/
 // var MyFunctionalComponent = props => (
@@ -15,37 +16,16 @@ export default class App extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            profiles : [
-                // {
-                //     id: 0,
-                //     name: 'David', 
-                //     age: 30,
-                //     biography: 'enjoys swimming and biking',
-                //     hobbies: ['swimming', 'biking']
-                // },
-                // {
-                //     id: 1,
-                //     name: 'Bill', 
-                //     age: 42,
-                //     biography: 'enjoys long walks on the beach',
-                //     hobbies: ['gardening', 'gaming']
-                // }
-            ]
+            profiles : []
         }
         this.addUser = this.addUser.bind(this);
     }
 
     componentDidMount() {
-        fetch('http://localhost:8888/profiles')
-        .then(res => res.json())
-        .then(data => {
-            console.log(data)
+        getProfiles().then(profiles => {
             this.setState({
-                profiles : data
+                profiles: profiles
             })
-        })
-        .catch(err => {
-            console.log(err)
         })
     }
 
@@ -58,14 +38,13 @@ export default class App extends React.Component {
     render() {
         let profiles = this.state.profiles.map((profile, index) => {
             return (
-            <div key={profile.id}>
-                <Profile
-                name={profile.name}
-                age={profile.age}
-                biography={profile.biography}
-                hobbies={profile.hobbies}
-                />
-            </div>
+            <Profile
+            key={index}
+            name={profile.name}
+            age={profile.age}
+            biography={profile.biography}
+            hobbies={profile.hobbies}
+            />
             )
         })
         return (
